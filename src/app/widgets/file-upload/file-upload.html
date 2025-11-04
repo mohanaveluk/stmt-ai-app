@@ -1,0 +1,37 @@
+<button mat-raised-button color="primary"
+        (click)="onClick($event)"
+>
+  <mat-icon>add</mat-icon>
+  {{chooseLabel}}</button>
+<input #fileUpload
+       type="file"
+       class="input_fileupload--hidden"
+       (input)="onInput($event)"
+       (change)="onFileSelected($event)"
+       [accept]="accept"
+       [(ngModel)]="inputFileName"
+       multiple="multiple"
+>
+
+<div *ngFor="let f of files" style="width: 50rem;">
+  <div class="file-row">
+  <span style="flex:1">{{f.name}}</span>
+  <span style="width:100px;text-align: end">{{ formatFileSize(f.size) }}</span>
+
+    <div style="width:160px;display:flex;align-items:center;justify-content: center; gap:8px;">
+      <!-- <mat-progress-bar *ngIf="getStatus(f).status !== 'idle'" style="width:68px;" mode="determinate" [value]="getStatus(f).progress"></mat-progress-bar> -->
+      <mat-progress-spinner *ngIf="getStatus(f).status !== 'idle' && (getStatus(f).status !== 'completed' && getStatus(f).status !== 'failed')" style="width:60px;" mode="determinate" [value]="getStatus(f).progress" [diameter]="35"></mat-progress-spinner>
+      <span *ngIf="getStatus(f).status === 'completed'" style="min-width:40px;"><mat-icon color="primary" class="custom-icon">cloud_done</mat-icon></span>
+      <span *ngIf="getStatus(f).status === 'in-progress'" style="min-width:40px">{{getStatus(f).progress}}%</span>
+      <span *ngIf="getStatus(f).status === 'failed'" style="color:#b00020;min-width:40px"><mat-icon color="accent" class="custom-icon">cloud_off</mat-icon></span>
+    </div>
+
+    <button mat-icon-button
+            color="primary"
+            [attr.title]="deleteButtonLabel?deleteButtonLabel:null"
+            (click)="removeFile($event,f)"
+    >
+      <mat-icon>{{deleteButtonIcon}}</mat-icon>
+    </button>
+  </div>
+</div>
