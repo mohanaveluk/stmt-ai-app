@@ -2,7 +2,7 @@
 FROM node:20-alpine as node
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm install -g npm@11.6.2
 RUN export NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build-prod
 COPY ./web.config /app/dist/stmt-ai-app
