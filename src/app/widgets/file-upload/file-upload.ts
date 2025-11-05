@@ -3,6 +3,7 @@ import {DomSanitizer } from "@angular/platform-browser";
 
 import { SharedCommonModule, SharedMaterialModule } from "../../shared/modules";
 import { HttpClient, HttpEventType } from "@angular/common/http";
+import { ApiUrlBuilder } from "../../shared/utility/api-url-builder";
 
 
 @Component({
@@ -16,7 +17,8 @@ import { HttpClient, HttpEventType } from "@angular/common/http";
 })
 export class FileUpload {
   //https://stackblitz.com/edit/angular-material-fileupload
-  private apiUrl = "http://localhost:3000/api/v1/upload";
+  private apiUrl1 = "http://localhost:3000/api/v1/upload";
+  private uploadUrl = "";
   fieldName: string = 'file';
   uploadStatus: string = '';
   
@@ -91,7 +93,11 @@ export class FileUpload {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private httpClient: HttpClient) {
+    private httpClient: HttpClient,
+    private apiUrlBuilder: ApiUrlBuilder
+  ) {
+      this.uploadUrl = this.apiUrlBuilder.buildApiUrl('upload');
+
   }
 
   onClick(event: any) {
@@ -178,7 +184,7 @@ export class FileUpload {
     console.log('Uploading files:', this.files);
     // multipart/form-data
     // Use a provided `url` input if present, otherwise fall back to component apiUrl
-    const uploadUrl = this.url || this.apiUrl;
+    const uploadUrl = this.url || this.uploadUrl;
 
     const formData = new FormData();
     // Use only the configured field name to avoid sending unexpected fields
